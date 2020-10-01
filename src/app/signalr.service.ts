@@ -4,7 +4,7 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signal
 import { from } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { chatMesage } from './chatMesage';
-
+import { MessagePackHubProtocol } from '@microsoft/signalr-protocol-msgpack'
 @Injectable({
   providedIn: 'root'
 })
@@ -38,15 +38,16 @@ export class SignalrService {
   private getConnection(): HubConnection {
     return new HubConnectionBuilder()
       .withUrl(this.connectionUrl)
+      .withHubProtocol(new MessagePackHubProtocol())
       //  .configureLogging(LogLevel.Trace)
       .build();
   }
 
   private buildChatMessage(message: string): chatMesage {
     return {
-      connectionId: this.hubConnection.connectionId,
-      text: message,
-      dateTime: new Date()
+      ConnectionId: this.hubConnection.connectionId,
+      Text: message,
+      DateTime: new Date()
     };
   }
 
